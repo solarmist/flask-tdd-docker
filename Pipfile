@@ -13,6 +13,7 @@ psycopg2-binary = "==2.8.4"
 Flask = "==1.1.1"
 Flask-SQLAlchemy = "==2.4.1"
 Werkzeug = "==0.16.1"
+pytest = "*"
 
 [requires]
 python_version = "3.8"

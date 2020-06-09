@@ -2,41 +2,46 @@ import os
 
 # Consider switching this to using dotenv
 
-DB_USER = os.environ.get("POSTGRESQL_USER")
-DB_PASS = os.environ.get("POSTGRESQL_PASSWORD")
+_DB_USER = os.environ.get("POSTGRESQL_USER", "DEFAULT_USER")
+_DB_PASS = os.environ.get("POSTGRESQL_PASSWORD", "DEFAULT_PASS")
 
 
 class BaseConfig:
     """Fallback default configuration"""
 
-    TESTING = False
+    DEBUG = False
+    EXPLAIN_TEMPLATE_LOADING = False
+    JSON_AS_ASCII = False
+    JSONIFY_PRETTYPRINT_REGULAR = False
+    PREFERRED_URL_SCHEME = "https"
+    PRESERVE_CONTEXT_ON_EXCEPTION = False
+    PROPAGATE_EXCEPTIONS = False
+    RESTX_MASK_SWAGGER = True
+    SECRET_KEY = os.environ.get("SECRET_KEY", "Super Cat Spy Key")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL").format(
+        DB_USER=_DB_USER, DB_PASS=_DB_PASS
+    )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    TESTING = False
 
 
 class DevelopmentConfig(BaseConfig):
     """Development configuration"""
 
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL").format(
-        DB_USER=DB_USER, DB_PASS=DB_PASS
-    )
+    DEBUG = True
+    JSONIFY_PRETTYPRINT_REGULAR = True
 
 
 class TestingConfig(BaseConfig):
     """Configuration for running tests"""
 
+    JSONIFY_PRETTYPRINT_REGULAR = True
+    PRESERVE_CONTEXT_ON_EXCEPTION = True
     TESTING = True
-
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_TEST_URL").format(
-        DB_USER=DB_USER, DB_PASS=DB_PASS
-    )
 
 
 class ProductionConfig(BaseConfig):
     """Production configuration"""
 
+    DEBUG = False
     TESTING = False
-    POSTGRESQL_USER = os.environ.get("POSTGRESQL_USER")
-    POSTGRESQL_PASSWORD = os.environ.get("POSTGRESQL_PASSWORD")
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL").format(
-        DB_USER=DB_USER, DB_PASS=DB_PASS
-    )
