@@ -1,0 +1,17 @@
+# Docker compose file version
+version: '3.7'
+
+services:
+
+    users:  # Service called "users"
+        build:
+            context: .  # The path containing the Dockerfile or a URL to a git repo
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/usr/src/app
+            # This is used to mount the code from the current dir into the container. Needed for dev otherwise you'd need to rebuild the image for every change.
+        ports:
+            - 5001:5000
+        environment:
+            - FLASK_APP=project/__init__.py
+            - FLASK_ENV=development
