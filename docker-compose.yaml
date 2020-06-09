@@ -7,6 +7,7 @@ services:
         build:
             context: .  # The path containing the Dockerfile or a URL to a git repo
             dockerfile: Dockerfile
+        entrypoint: ["/usr/src/app/entrypoint.sh"]
         volumes:
             - ./:/usr/src/app
             # This is used to mount the code from the current dir into the container. Needed for dev otherwise you'd need to rebuild the image for every change.
@@ -15,3 +16,18 @@ services:
         environment:
             - FLASK_APP=project/__init__.py
             - FLASK_ENV=development
+            - APP_SETTINGS=project.config.DevelopmentConfig
+            - DATABASE_URL=postgresql://postgres:postgres@users-db:5432/users_dev
+            - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_test
+        depends_on:
+            - users-db
+
+    users-db:
+        build:
+            context: ./project/db
+            dockerfile: Dockerfile
+        expose:
+            - 5432
+        environment:
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres

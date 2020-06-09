@@ -1,5 +1,5 @@
 # https://flask.palletsprojects.com/en/1.1.x/tutorial/install/
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 setup(
     name="Your Application",
