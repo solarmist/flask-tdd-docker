@@ -13,12 +13,9 @@ services:
             # This is used to mount the code from the current dir into the container. Needed for dev otherwise you'd need to rebuild the image for every change.
         ports:
             - 5001:5000
-        environment:
-            - FLASK_APP=project/__init__.py
-            - FLASK_ENV=development
-            - APP_SETTINGS=project.config.DevelopmentConfig
-            - DATABASE_URL=postgresql://postgres:postgres@users-db:5432/users_dev
-            - DATABASE_TEST_URL=postgresql://postgres:postgres@users-db:5432/users_test
+        env_file:
+            - ./.env.common
+            - ./.env.dev
         depends_on:
             - users-db
 
@@ -28,6 +25,5 @@ services:
             dockerfile: Dockerfile
         expose:
             - 5432
-        environment:
-            - POSTGRES_USER=postgres
-            - POSTGRES_PASSWORD=postgres
+        env_file:
+            - ./.env.dev
