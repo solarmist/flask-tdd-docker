@@ -2,8 +2,8 @@ import os
 
 # Consider switching this to using dotenv
 
-_DB_USER = os.environ.get("POSTGRESQL_USER", "DEFAULT_USER")
-_DB_PASS = os.environ.get("POSTGRESQL_PASSWORD", "DEFAULT_PASS")
+_DB_USER = os.environ.get("POSTGRES_USER", "FLASK_USER")
+_DB_PASS = os.environ.get("POSTGRES_PASSWORD", "FLASK_PASS")
 
 
 class BaseConfig:

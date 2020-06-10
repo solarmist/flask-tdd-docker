@@ -1,41 +1,31 @@
 import os
 from logging import getLogger
 
-from flask import Flask, jsonify
-from flask_restx import Api, Resource
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 log = getLogger(__name__)
-app = Flask(__name__)
-
-api = Api(app)
-
-# Set the config
-config_file = os.getenv("APP_SETTINGS")
-log.debug(f"Config file to load: {config_file}")
-app.config.from_object(config_file)
-
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 
-class User(db.Model):
-    __tablename__ = "users"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    username = db.Column(db.String(128), nullable=False)
-    email = db.Column(db.String(128), nullable=False)
-    active = db.Column(db.Boolean(), default=True, nullable=False)
+def create_app(script_info=None):
+    app = Flask(__name__)
 
-    def __init__(self, username, email):
-        self.username = username
-        self.email = email
+    @app.shell_context_processor
+    def ctx():
+        """shell context for flask cli"""
+        return {"app": app, "db": db}
 
+    # Set the config
+    config_file = os.getenv("APP_SETTINGS")
+    log.debug(f"Config file to load: {config_file}")
+    app.config.from_object(config_file)
+    log.debug(f"DB URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
-class Ping(Resource):
-    def get(self):
-        return {
-            "status": "success",
-            "message": "pong!",
-        }
+    db.init_app(app)
 
+    from .api import blueprint as api
 
-api.add_resource(Ping, "/ping")
+    app.register_blueprint(api)
+
+    return app
