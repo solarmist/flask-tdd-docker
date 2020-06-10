@@ -1,8 +1,8 @@
 from http import HTTPStatus
 
 
-def test_ping(test_client):
-    resp = test_client.get("/ping")
+def test_ping(client):
+    resp = client.get("/ping")
     data = resp.get_json()
     assert resp.status_code == HTTPStatus.OK
     assert "pong" in data["message"]

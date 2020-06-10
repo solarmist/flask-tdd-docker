@@ -26,6 +26,11 @@ class Users(Resource):
 @api.route("")
 @api.response(HTTPStatus.NOT_FOUND.value, "User not found.")
 class UsersList(Resource):
+    @api.marshal_list_with(user)
+    # or marshal(user, as_list=True)
+    def get(self):
+        return User.query.all()
+
     @api.doc("Create a new user")
     @api.response(HTTPStatus.CREATED.value, "User successfully created.")
     @api.response(HTTPStatus.CONFLICT.value, "User already exists.")

@@ -49,7 +49,7 @@ import pytest
         ),
     ],
 )
-def test_configs(test_app, environment, expected, invalid):
+def test_configs(app, environment, expected, invalid):
     # Given
     # The given part describes the state of the world before you begin the behavior you're specifying in
     # this scenario. You can think of it as the pre-conditions to the test.
@@ -61,7 +61,7 @@ def test_configs(test_app, environment, expected, invalid):
     # The when section is that behavior that you're specifying
     #
     # Behavior/logic being tested
-    test_app.config.from_object(environment)
+    app.config.from_object(environment)
 
     # Then
     # Finally the then section describes the changes you expect due to the specified behavior.
@@ -69,10 +69,10 @@ def test_configs(test_app, environment, expected, invalid):
     # the expected changes/results based on the behavior
     for key, value in expected.items():
         assert (
-            test_app.config[key] == value
-        ), f"{test_app.config[key]} does not match {value} for {key}"
+            app.config[key] == value
+        ), f"{app.config[key]} does not match {value} for {key}"
 
     for key, value in invalid.items():
         assert (
-            test_app.config[key] != value
-        ), f"{test_app.config[key]} should not match {value} for {key}"
+            app.config[key] != value
+        ), f"{app.config[key]} should not match {value} for {key}"
