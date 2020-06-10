@@ -62,8 +62,9 @@ def test_get_user(test_client, test_database):
     assert "myne" in data["username"]
     assert "myne@gilberta.co" in data["email"]
 
+
 def test_get_user_fail(test_client, test_database):
-    resp = test_client.get(f"/users/9999", content_type="application/json")
+    resp = test_client.get("/users/9999", content_type="application/json")
     data = resp.get_json()
     assert resp.status_code == HTTPStatus.NOT_FOUND
-    assert 'User 9999 does not exist' in data["message"]
+    assert "User 9999 does not exist" in data["message"]

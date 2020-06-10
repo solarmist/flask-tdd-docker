@@ -19,7 +19,7 @@ class Users(Resource):
     def get(self, user_id):
         user = User.query.filter_by(id=user_id).first()
         if not user:
-            api.abort(HTTPStatus.NOT_FOUND,  message=f"User {user_id} does not exist")
+            api.abort(HTTPStatus.NOT_FOUND, message=f"User {user_id} does not exist")
         return user
 
 
