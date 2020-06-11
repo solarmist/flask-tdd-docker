@@ -18,7 +18,7 @@ stages:
     jobs:
       - template: azure-pipelines-test.yml
         parameters:
-          images: ['ubuntu-16.04', 'macos-10.14', 'vs2017-win2016' ]
+          images: ['ubuntu-16.04', 'macOS-latest', 'vs2017-win2016' ]
           pythonVersions: [ '3.6', '3.7', '3.8' ]
 
 
