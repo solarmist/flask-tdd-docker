@@ -24,7 +24,7 @@
             displayName: 'Lint code'
 
           - script: |
-              pytest tests --rcfile=setup.cfg
+              pytest tests --verbose --junitxml=junit/test-results.xml --cov=. --cov-branch --cov-report=xml
             displayName: 'Test with pytest'
             env:
               APP_SETTINGS: 'project.config.TestingConfig'
@@ -41,7 +41,7 @@
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage Results'
             inputs:
-              codeCoverageTool: JaCoCo
+              codeCoverageTool: cobertura
               failIfCoverageEmpty: true
               summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
               reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
