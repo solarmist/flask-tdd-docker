@@ -42,9 +42,9 @@ stages:
           imageName: 'vs2017-win2016'
 
         Python37:
-          python.version: '3.7'
+          python.version: '3.7.7'
         Python36:
-          python.version: '3.6'
+          python.version: '3.8.3'
 
     pool:
       vmImage: $(imageName)
