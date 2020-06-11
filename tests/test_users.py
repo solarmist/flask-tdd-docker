@@ -76,6 +76,6 @@ def test_UsersList_get(client, fill_db):
     data = resp.get_json()
 
     assert resp.status_code == HTTPStatus.OK
-    assert len(data) == 5
+    assert len(data) == 6
     assert "benno" == data[0]["username"]
     assert "myne" == data[1]["username"]

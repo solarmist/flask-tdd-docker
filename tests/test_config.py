@@ -10,8 +10,8 @@ import pytest
                 TESTING=False,
                 DEBUG=False,
                 SQLALCHEMY_TRACK_MODIFICATIONS=False,
-                SECRET_KEY="testing_key",
-                ENV="development",
+                SECRET_KEY="Super Cat Spy Key",
+                ENV="testing",
             ),
             dict(),  # invalid values for this environment
             id="Base",

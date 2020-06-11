@@ -1,0 +1,48 @@
+ jobs:
+  - ${{ each image in parameters.images }}:
+    - ${{ each pythonVersion in parameters.pythonVersions }}:
+      - job:
+        displayName: ${{ format('OS:{0} Python:{1}', image, pythonVersion) }}
+        pool:
+          vmImage: ${{ image }}
+
+        steps:
+          - task: UsePythonVersion@0
+            displayName: 'Use Python ${{ pythonVersion }}'
+            inputs:
+              versionSpec: ${{ pythonVersion }}
+
+          - script: |
+              pip install -r requirements.txt
+              python ./setup.py develop
+
+            displayName: 'Install requirements'
+
+          - script: |
+              python -m pip install flake8
+              pip install pytest
+              pip install pytest-cov
+              flake8 .
+            displayName: 'Lint code'
+
+          - script: |
+              pytest tests --verbose --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
+            displayName: 'Test with pytest'
+            env:
+              APP_SETTINGS: 'project.config.TestingConfig'
+              FLASK_ENV: 'testing'
+              DATABASE_URL: $(DATABASE_URL)
+
+          - task: PublishTestResults@2
+            displayName: 'Publish test results'
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFiles: '**/test-*.xml'
+              testRunTitle: 'Publish test results for Python ${{ pythonVersion }}'
+
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Publish Code Coverage Results'
+            inputs:
+              codeCoverageTool: Cobertura
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
