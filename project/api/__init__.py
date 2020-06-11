@@ -1,4 +1,4 @@
-from flask import Blueprint
+from flask import Blueprint, url_for
 from flask_restx import Api
 
 from .ping import api as ping_ns

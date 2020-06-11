@@ -11,11 +11,11 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        "Flask",
         "Flask-RESTX",
-        "werkzeug",
         "Flask-SQLAlchemy",
-        "psycopg2-binary",
+        "Flask",
+        "gunicorn" "psycopg2-binary",
         "pytest",
+        "werkzeug",
     ],
 )

@@ -1,0 +1,33 @@
+# pull official base image
+FROM python:3.8.1-alpine
+
+RUN apk update && \
+    apk add --virtual build-deps gcc python-dev musl-dev && \
+    apk add postgresql-dev && \
+    apk add netcat-openbsd
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+# Prevents buffering io
+ENV PYTHONUNBUFFERED 1
+ENV FLASK_ENV production
+ENV APP_SETTINGS project.config.ProductionConfig
+
+# set working directory
+# RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+# add and install requirements
+COPY ./requirements.txt /usr/src/app/requirements.txt
+RUN pip install -r requirements.txt
+
+# Add the app
+COPY . /usr/src/app
+
+# add and run as non-root user
+RUN adduser -D app_user
+USER app_user
+
+# Start gunicorn listening to both IPv6 and v4
+# CMD gunicorn  --bind [::1]:$PORT --bind 0.0.0.0:$PORT manage:app
+CMD gunicorn --bind 0.0.0.0:$PORT manage:app
