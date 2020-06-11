@@ -14,19 +14,17 @@
 
           - script: |
               pip install -r requirements.txt
+              pip install pytest pytest-cov flake8
               python ./setup.py develop
 
             displayName: 'Install requirements'
 
           - script: |
-              python -m pip install flake8
-              pip install pytest
-              pip install pytest-cov
               flake8 .
             displayName: 'Lint code'
 
           - script: |
-              pytest tests --verbose --junitxml=junit/test-results.xml --cov=. --cov-branch --cov-report=xml
+              pytest tests
             displayName: 'Test with pytest'
             env:
               APP_SETTINGS: 'project.config.TestingConfig'
@@ -44,7 +42,6 @@
             displayName: 'Publish Code Coverage Results'
             inputs:
               codeCoverageTool: JaCoCo
-              # https://stackoverflow.com/questions/56859264/publishing-code-coverage-results-from-reportgenerator-not-working
               failIfCoverageEmpty: true
               summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
               reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
