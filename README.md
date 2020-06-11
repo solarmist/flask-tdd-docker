@@ -1,4 +1,5 @@
-[![Build Status](https://dev.azure.com/solar-mist/flask-tdd-docker/_apis/build/status/solarmist.flask-tdd-docker?branchName=master)](https://dev.azure.com/solar-mist/flask-tdd-docker/_build/latest?definitionId=2&branchName=master)
+# Current Status [![Build Status](https://dev.azure.com/solar-mist/flask-tdd-docker/_apis/build/status/solarmist.flask-tdd-docker%20-%20CI?branchName=master&stageName=Test%20Product)](https://dev.azure.com/solar-mist/flask-tdd-docker/_build?definitionId=2&branchName=master)
+
 
 # flask-tdd-docker
 TDD with Python, Flask and Docker
