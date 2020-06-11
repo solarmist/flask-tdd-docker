@@ -1,5 +1,5 @@
 # Docker
-# Build a Docker image 
+# Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
@@ -12,73 +12,28 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
-  jobs:  
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: Docker@2
-      displayName: Build an image
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile.prod'
-        tags: |
-          $(tag)
-- stage: Test
-  displayName: Test Product
-  jobs:
-  - job: 'Test'
+  - stage: Test
+    displayName: Test Product
 
-    strategy:
-      matrix:
-        linux:
-          imageName: 'ubuntu-16.04'
-        mac:
-          imageName: 'macos-10.14'
-        windows:
-          imageName: 'vs2017-win2016'
+    jobs:
+      - template: azure-pipelines-testing.yml
+        parameters:
+          images: ['ubuntu-16.04', 'macos-10.14', 'vs2017-win2016' ]
+          pythonVersions: [ '3.6', '3.7', '3.8' ]
 
-        Python37:
-          python.version: '3.7.7'
-        Python36:
-          python.version: '3.8.3'
 
-    pool:
-      vmImage: $(imageName)
-
-    steps:
-    - task: UsePythonVersion@0
-      displayName: 'Use Python $(python.version)'
-      inputs:
-        versionSpec: '$(python.version)'
-      
-    - script: pip install -r requirements.txt
-      displayName: 'Install requirements'
-
-    - script: |
-        python -m pip install flake8
-        flake8 .
-      displayName: 'Run lint tests'
-
-    - script: |
-        pip install pytest
-        pip install pytest-cov
-        pytest tests --doctest-modules --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
-      displayName: 'Test with pytest'
-
-    - task: PublishTestResults@2
-      condition: succeededOrFailed()
-      inputs:
-        testResultsFiles: '**/test-*.xml'
-        testRunTitle: 'Publish test results for Python $(python.version)'
-      displayName: 'Publish test results'
-    - task: PublishCodeCoverageResults@1
-      inputs:
-        codeCoverageTool: Cobertura
-        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
-        reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
-      displayName: 'Publish Code Coverage Results'
-
+  - stage: Build
+    displayName: Build image
+    jobs:
+    - job: Build
+      displayName: Build
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - task: Docker@2
+        displayName: Build an image
+        inputs:
+          command: build
+          dockerfile: '$(Build.SourcesDirectory)/Dockerfile.prod'
+          tags: |
+            $(tag)

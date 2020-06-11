@@ -6,7 +6,7 @@ from .users import api as users_ns
 
 blueprint = Blueprint("api", __name__)
 
-
+# https://stackoverflow.com/questions/47508257/serving-flask-restplus-on-https-server
 class MyApi(Api):
     @property
     def specs_url(self):
