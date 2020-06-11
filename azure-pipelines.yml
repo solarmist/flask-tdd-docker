@@ -18,7 +18,7 @@ stages:
     jobs:
       - template: azure-pipelines-test.yml
         parameters:
-          images: ['ubuntu-16.04', 'macOS-latest', 'vs2017-win2016' ]
+          images: ['ubuntu-latest', 'macOS-latest', 'vs2017-win2016' ]
           pythonVersions: [ '3.6', '3.7', '3.8' ]
 
 
@@ -34,7 +34,8 @@ stages:
       - task: Docker@2
         displayName: Build an image
         inputs:
-          command: build
+          command: buildAndPush
           dockerfile: '$(Build.SourcesDirectory)/Dockerfile.prod'
+          containerRegistry: $(dockerRegistryServiceConnection)
           tags: |
             $(tag)
