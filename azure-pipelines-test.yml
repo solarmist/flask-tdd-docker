@@ -43,6 +43,9 @@
           - task: PublishCodeCoverageResults@1
             displayName: 'Publish Code Coverage Results'
             inputs:
-              codeCoverageTool: Cobertura
+              codeCoverageTool: JaCoCo
+              # https://stackoverflow.com/questions/56859264/publishing-code-coverage-results-from-reportgenerator-not-working
+              disable.coverage.autogenerate: 'true'
+              failIfCoverageEmpty: true
               summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/coverage.xml'
               reportDirectory: '$(System.DefaultWorkingDirectory)/**/htmlcov'
