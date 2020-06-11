@@ -5,6 +5,8 @@
         displayName: ${{ format('OS:{0} Python:{1}', image, pythonVersion) }}
         pool:
           vmImage: ${{ image }}
+        variables:
+          - group: flask-tdd-docker-testing
 
         steps:
           - task: UsePythonVersion@0
@@ -27,9 +29,15 @@
               pytest tests --verbose --junitxml=junit/test-results.xml --cov=project --cov-branch --cov-report=xml
             displayName: 'Test with pytest'
             env:
-              APP_SETTINGS: 'project.config.TestingConfig'
-              FLASK_ENV: 'testing'
-              DATABASE_URL: $(DATABASE_URL)
+              POSTGRES_USER: $(POSTGRES_USER)
+              POSTGRES_PASSWORD: $(POSTGRES_PASSWORD)
+              DB_HOST: $(DB_HOST)
+              DB_MODE: $(DB_MODE)
+              DB_NAME: $(DB_NAME)
+              DB_PORT: $(DB_PORT)
+              SSL_MODE: $(SSL_MODE)
+              APP_SETTINGS: $(APP_SETTINGS)
+              FLASK_ENV: $(FLASK_ENV)
 
           - task: PublishTestResults@2
             displayName: 'Publish test results'
