@@ -26,7 +26,7 @@
             displayName: 'Lint code'
 
           - script: |
-              pytest tests --verbose --junitxml=junit/test-results.xml --cov=. --cov-report=xml --cov-report=html
+              pytest tests --verbose --junitxml=junit/test-results.xml --cov=. --cov-branch --cov-report=xml
             displayName: 'Test with pytest'
             env:
               APP_SETTINGS: 'project.config.TestingConfig'
