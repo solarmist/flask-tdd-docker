@@ -18,8 +18,8 @@ stages:
     jobs:
       - template: azure-pipelines-test.yml
         parameters:
-          images: ['ubuntu-latest', 'macOS-latest', 'vs2017-win2016' ]
-          pythonVersions: [ '3.6', '3.7', '3.8' ]
+          images: ['ubuntu-latest', 'macOS-latest' ] #, 'vs2017-win2016' ]
+          pythonVersions: [ '3.8' ]
 
 
   - stage: Build
