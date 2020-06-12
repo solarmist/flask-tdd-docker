@@ -17,7 +17,7 @@ def create_app(script_info=None):
         return {"app": app, "db": db}
 
     # Set the config
-    config_file = os.getenv("APP_SETTINGS")
+    config_file = os.getenv("APP_SETTINGS", "project.config.DevelopmentConfig")
     log.debug(f"Config file to load: {config_file}")
     app.config.from_object(config_file)
     log.debug(f"DB URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
