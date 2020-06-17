@@ -6,7 +6,7 @@ services:
     users:  # Service called "users"
         build:
             context: .  # The path containing the Dockerfile or a URL to a git repo
-            dockerfile: Dockerfile
+            dockerfile: Dockerfile.prod
         entrypoint: ["/usr/src/app/entrypoint.sh"]
         volumes:
             - ./:/usr/src/app
