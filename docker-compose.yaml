@@ -12,7 +12,7 @@ services:
             - ./:/usr/src/app
             # This is used to mount the code from the current dir into the container. Needed for dev otherwise you'd need to rebuild the image for every change.
         ports:
-            - 5001:8000
+            - 5001:5000
         env_file:
             - ./.env.common
             - ./${ENV_FILE}
