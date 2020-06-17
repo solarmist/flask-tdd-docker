@@ -27,5 +27,5 @@ RUN adduser -D app_user
 USER app_user
 
 # Start gunicorn listening to both IPv6 and v4
-CMD gunicorn --bind 0.0.0.0:7000 --timeout 600 manage:app
+CMD gunicorn --bind 0.0.0.0:80 --timeout 600 manage:app
 # CMD gunicorn --bind 0.0.0.0:$PORT manage:app
