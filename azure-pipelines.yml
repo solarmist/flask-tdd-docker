@@ -21,22 +21,36 @@ stages:
           images: ['ubuntu-latest', 'macOS-latest' ] #, 'vs2017-win2016' ]
           pythonVersions: [ '3.8' ]
 
-
   - stage: Build
-    displayName: Build and push stage
-    dependsOn: []
     jobs:
-    - job: Build
-      displayName: Build
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - task: Docker@2
-        displayName: Build and push an image to container registry
-        inputs:
-          command: buildAndPush
-          dockerfile: '$(Build.SourcesDirectory)/Dockerfile.prod'
-          containerRegistry: 'Docker Container Registry'
-          repository: flask-tdd-docker
-          tags: |
-            $(tag)
+      - job: buildAndPushDockerImage
+        pool:
+          name: Azure Pipelines
+
+        steps:
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Azure Deployment:Create Azure Container Registry'
+          inputs:
+            azureSubscription: 'flask-tdd-docker - Azure'
+            resourceGroupName: 'flask-tdd-docker-solarmist-test'
+            location: 'South Central US'
+            templateLocation: 'URL of the file'
+            csmFileLink: 'https://raw.githubusercontent.com/Microsoft/devops-project-samples/057f6cc268a62922d012067d069d58684e967d0a/armtemplates/webapp-containers/containerRegistry-template.json'
+            overrideParameters: '-registryName "flaskTddDocker" -registryLocation "West US" -registrySku "Basic"'
+
+        - task: Docker@1
+          displayName: 'Build an image'
+          inputs:
+            azureSubscriptionEndpoint: 'flask-tdd-docker - Azure'
+            azureContainerRegistry: flasktdddocker.azurecr.io
+            dockerFile: '**/Dockerfile.prod'
+            imageName: 'flasktdddocker:$(Build.BuildId)'
+
+        - task: Docker@1
+          displayName: 'Push an image'
+          inputs:
+            azureSubscriptionEndpoint: 'flask-tdd-docker - Azure'
+            azureContainerRegistry: flasktdddocker.azurecr.io
+            command: 'Push an image'
+            imageName: 'flasktdddocker:$(Build.BuildId)'
+
