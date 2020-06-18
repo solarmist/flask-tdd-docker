@@ -1,5 +1,4 @@
-# Current Status [![Build Status]([![Build status](https://dev.azure.com/solarmist-test/flask-tdd-docker/_apis/build/status/flask-tdd-docker%20-%20CI)](https://dev.azure.com/solarmist-test/flask-tdd-docker/_build/latest?definitionId=1))
-
+# Current Status [![Build Status](https://dev.azure.com/solarmist-test/flask-tdd-docker/_apis/build/status/Build%20and%20Test%20Pipeline?branchName=master)](https://dev.azure.com/solarmist-test/flask-tdd-docker/_build/latest?definitionId=2&branchName=master)
 
 # flask-tdd-docker
 TDD with Python, Flask and Docker
