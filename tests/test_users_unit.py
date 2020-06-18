@@ -86,7 +86,7 @@ def test_remove_user(client, mock_api_users_db):
     resp = client.delete("/users/1")
     data = resp.get_json()
     assert resp.status_code == HTTPStatus.OK
-    assert f"test1@email.com was removed!" in data["message"]
+    assert "test1@email.com was removed!" in data["message"]
 
 
 def test_remove_user_incorrect_id(client, mock_api_users_db):
@@ -134,7 +134,9 @@ def test_update_user(client, mock_api_users_db):
         ),
     ],
 )
-def test_update_user_invalid(client, mock_api_users_db, data, user_id, response, message):
+def test_update_user_invalid(
+    client, mock_api_users_db, data, user_id, response, message
+):
     """Ensure that users can be updated"""
     resp1 = client.put(f"/users/{user_id}", json=data)
     data = resp1.get_json()
