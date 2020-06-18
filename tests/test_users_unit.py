@@ -13,7 +13,8 @@ import pytest
             id="Create user",
         ),
         pytest.param(
-            {"username": "benno", "email": "benno@gilberta.co"},
+            # Note: test1@email.com is the only "duplicate" user
+            {"username": "test1", "email": "test1@email.com"},
             HTTPStatus.CONFLICT,
             "Sorry, that email already exists.",
             id="Add duplicate user",
@@ -39,9 +40,7 @@ import pytest
     ],
 )
 def test_add_user(client, mock_api_users_db, data, response, message):
-    """Test adding users endpoint
-
-    Note: Do not truncate DB between tests."""
+    """Test adding users endpoint"""
     resp = client.post("/users", json=data, content_type="application/json",)
 
     assert (
@@ -52,20 +51,21 @@ def test_add_user(client, mock_api_users_db, data, response, message):
 
 def test_get_user(client, mock_api_users_db):
     """Ensure we can pull a user from the API end point"""
-    resp = client.get(f"/users/{user.id}")
+    resp = client.get("/users/1")
     data = resp.get_json()
 
     assert resp.status_code == HTTPStatus.OK
-    assert "myne" in data["username"]
-    assert "myne@gilberta.co" in data["email"]
+    assert "test1" in data["username"]
+    assert "test1@email.com" in data["email"]
 
 
 def test_get_user_fail(client, mock_api_users_db):
     """Ensure missing users return a 404"""
-    resp = client.get("/users/1", content_type="application/json")
+    # For unit tests only user 999 doesn't exist
+    resp = client.get("/users/999", content_type="application/json")
     data = resp.get_json()
     assert resp.status_code == HTTPStatus.NOT_FOUND
-    assert "User 1 does not exist" in data["message"]
+    assert "User 999 does not exist" in data["message"]
 
 
 def test_get_all_users(client, mock_api_users_db):

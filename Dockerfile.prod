@@ -15,12 +15,11 @@ ENV PYTHONUNBUFFERED 1
 # RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-# add and install requirements
-COPY ./requirements.txt /usr/src/app/requirements.txt
-RUN pip install -r requirements.txt
-
 # Add the app
 COPY . /usr/src/app
+RUN pip install -r requirements.txt
+
+
 
 # add and run as non-root user
 RUN adduser -D app_user

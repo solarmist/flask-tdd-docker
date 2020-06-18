@@ -15,6 +15,7 @@ def mock_api_users_db(monkeypatch):
 
     monkeypatch.setattr(users, "get_all_users", lambda: [user1, user2])
     monkeypatch.setattr(users, "get_user_by_id", lambda user_id: None if user_id == 999 else user1)
+    monkeypatch.setattr(users, "get_user_by_email", lambda email: user1 if email == user1.email else None)
     monkeypatch.setattr(users, "add_user", lambda username, email: user1)
     monkeypatch.setattr(users, "update_user", lambda x, username, email: user1)
     monkeypatch.setattr(users, "delete_user", lambda user_id: None)

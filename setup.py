@@ -18,6 +18,7 @@ setup(
         "psycopg2-binary",
         "pytest",
         "pytest-cov",
+        "pytest-xdist",
         "werkzeug",
     ],
 )
