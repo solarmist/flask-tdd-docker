@@ -1,4 +1,5 @@
 import os
+
 from logging import getLogger
 
 from flask import Flask

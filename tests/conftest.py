@@ -3,6 +3,21 @@ import pytest
 from project import create_app
 from project import db as app_db
 from project.models import User
+from project.api import users
+
+@pytest.fixture(scope="function")
+def mock_api_users_db(monkeypatch):
+    """Mock all database functions"""
+    user1 = User(username="test1", email="test1@email.com")
+    user2 = User(username="test2", email="test2@email.com")
+    user1.id = 1
+    user2.id = 2
+
+    monkeypatch.setattr(users, "get_all_users", lambda: [user1, user2])
+    monkeypatch.setattr(users, "get_user_by_id", lambda user_id: None if user_id == 999 else user1)
+    monkeypatch.setattr(users, "add_user", lambda username, email: user1)
+    monkeypatch.setattr(users, "update_user", lambda x, username, email: user1)
+    monkeypatch.setattr(users, "delete_user", lambda user_id: None)
 
 
 @pytest.fixture(scope="module")

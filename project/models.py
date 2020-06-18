@@ -4,7 +4,7 @@ from sqlalchemy.sql import func
 from . import db
 
 
-class User(db.Model):
+class User(db.Model):  # type: ignore
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -13,9 +13,12 @@ class User(db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
     created_date = db.Column(db.DateTime, default=func.now(), nullable=False)
 
-    def __init__(self, username, email):
+    def __init__(self, username: str, email: str):
         self.username = username
         self.email = email
+
+    def __str__(self):
+        return f"User id: {self.id}, Username: {self.username}, Email:{self.email}"
 
     @classmethod
     def get_api_model(cls):

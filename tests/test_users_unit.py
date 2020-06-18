@@ -38,10 +38,10 @@ import pytest
         ),
     ],
 )
-def test_add_user(client, db, data, response, message):
+def test_add_user(client, mock_api_users_db, data, response, message):
     """Test adding users endpoint
 
-    Note: Do not truncate DB between these tests."""
+    Note: Do not truncate DB between tests."""
     resp = client.post("/users", json=data, content_type="application/json",)
 
     assert (
@@ -50,9 +50,8 @@ def test_add_user(client, db, data, response, message):
     assert message in resp.get_json()["message"]
 
 
-def test_get_user(client, truncate_db, add_user):
+def test_get_user(client, mock_api_users_db):
     """Ensure we can pull a user from the API end point"""
-    user = add_user("myne", "myne@gilberta.co")
     resp = client.get(f"/users/{user.id}")
     data = resp.get_json()
 
@@ -61,7 +60,7 @@ def test_get_user(client, truncate_db, add_user):
     assert "myne@gilberta.co" in data["email"]
 
 
-def test_get_user_fail(client, truncate_db):
+def test_get_user_fail(client, mock_api_users_db):
     """Ensure missing users return a 404"""
     resp = client.get("/users/1", content_type="application/json")
     data = resp.get_json()
@@ -69,40 +68,28 @@ def test_get_user_fail(client, truncate_db):
     assert "User 1 does not exist" in data["message"]
 
 
-def test_UsersList_get(client, fill_db):
+def test_get_all_users(client, mock_api_users_db):
     """Test all users can be queried properly"""
 
     resp = client.get("/users")
     data = resp.get_json()
 
     assert resp.status_code == HTTPStatus.OK
-    assert len(data) == 6
-    assert "benno" == data[0]["username"]
-    assert "myne" == data[1]["username"]
+    assert len(data) == 2
+    assert "test1" == data[0]["username"]
+    assert "test2" == data[1]["username"]
 
 
-def test_remove_user(client, truncate_db, add_user):
+def test_remove_user(client, mock_api_users_db):
     """Ensure a user can be deleted"""
-    # Ensure the user exists
-    user = add_user("user-to-be-removed", "remove-me@testdrive.io")
-    resp1 = client.get("/users")
-    data = resp1.get_json()
-    assert resp1.status_code == HTTPStatus.OK
-    assert len(data) == 1
-
     # Ensure the user is removed
-    resp2 = client.delete(f"/users/{user.id}")
-    data = resp2.get_json()
-    assert resp2.status_code == HTTPStatus.OK
-    assert f"{user.email} was removed!" in data["message"]
-
-    resp3 = client.get("/users")
-    data = resp3.get_json()
-    assert resp3.status_code == HTTPStatus.OK
-    assert len(data) == 0
+    resp = client.delete("/users/1")
+    data = resp.get_json()
+    assert resp.status_code == HTTPStatus.OK
+    assert f"test1@email.com was removed!" in data["message"]
 
 
-def test_remove_user_incorrect_id(client, fill_db):
+def test_remove_user_incorrect_id(client, mock_api_users_db):
     """Test that removing a user that doesn't exist fails"""
     resp = client.delete("/users/999")
     data = resp.get_json()
@@ -110,23 +97,15 @@ def test_remove_user_incorrect_id(client, fill_db):
     assert "User 999 does not exist" in data["message"]
 
 
-def test_update_user(client, truncate_db, add_user):
+def test_update_user(client, mock_api_users_db):
     """Ensure that users can be updated"""
-    user = add_user("user-to-be-updated", "update-me@testdriven.io")
     username = "me"
     email = "me@testdriven.io"
     # Update the user record
-    resp1 = client.put(f"/users/{user.id}", json={"username": username, "email": email})
+    resp1 = client.put("/users/1", json={"username": username, "email": email})
     data = resp1.get_json()
     assert resp1.status_code == HTTPStatus.OK
-    assert f"{user.id} was updated!" in data["message"]
-
-    # Ensure the user has been updated
-    resp2 = client.get(f"/users/{user.id}")
-    data = resp2.get_json()
-    assert resp2.status_code == HTTPStatus.OK
-    assert data["username"] == username
-    assert data["email"] == email
+    assert "1 was updated!" in data["message"]
 
 
 @pytest.mark.parametrize(
@@ -155,7 +134,7 @@ def test_update_user(client, truncate_db, add_user):
         ),
     ],
 )
-def test_update_user_invalid(client, fill_db, data, user_id, response, message):
+def test_update_user_invalid(client, mock_api_users_db, data, user_id, response, message):
     """Ensure that users can be updated"""
     resp1 = client.put(f"/users/{user_id}", json=data)
     data = resp1.get_json()
