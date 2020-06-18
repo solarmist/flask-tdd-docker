@@ -22,6 +22,8 @@ stages:
           pythonVersions: [ '3.8' ]
 
   - stage: Build
+    displayName: Build and push docker image
+    dependsOn: []
     jobs:
       - job: buildAndPushDockerImage
         pool:
