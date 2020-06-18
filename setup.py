@@ -17,6 +17,7 @@ setup(
         "gunicorn",
         "psycopg2-binary",
         "pytest",
+        "pytest-cov",
         "werkzeug",
     ],
 )

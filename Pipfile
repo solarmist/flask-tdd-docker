@@ -16,6 +16,7 @@ Flask-SQLAlchemy = "==2.4.1"
 Werkzeug = "==0.16.1"
 pytest = "*"
 gunicorn = "*"
+pytest-cov = "*"
 
 [requires]
 python_version = "3.8"

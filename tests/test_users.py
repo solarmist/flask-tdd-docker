@@ -79,3 +79,85 @@ def test_UsersList_get(client, fill_db):
     assert len(data) == 6
     assert "benno" == data[0]["username"]
     assert "myne" == data[1]["username"]
+
+
+def test_remove_user(client, truncate_db, add_user):
+    """Ensure a user can be deleted"""
+    # Ensure the user exists
+    user = add_user("user-to-be-removed", "remove-me@testdrive.io")
+    resp1 = client.get("/users")
+    data = resp1.get_json()
+    assert resp1.status_code == HTTPStatus.OK
+    assert len(data) == 1
+
+    # Ensure the user is removed
+    resp2 = client.delete(f"/users/{user.id}")
+    data = resp2.get_json()
+    assert resp2.status_code == HTTPStatus.OK
+    assert "remove-me@testdrive.io was removed!" in data["message"]
+
+    resp3 = client.get("/users")
+    data = resp3.get_json()
+    assert resp3.status_code == HTTPStatus.OK
+    assert len(data) == 0
+
+
+def test_remove_user_incorrect_id(client, fill_db):
+    """Test that removing a user that doesn't exist fails"""
+    resp = client.delete("/users/999")
+    data = resp.get_json()
+    assert resp.status_code == HTTPStatus.NOT_FOUND
+    assert "User 999 does not exist" in data["message"]
+
+
+def test_update_user(client, truncate_db, add_user):
+    """Ensure that users can be updated"""
+    user = add_user("user-to-be-updated", "update-me@testdriven.io")
+    username = "me"
+    email = "me@testdriven.io"
+    # Update the user record
+    resp1 = client.put(f"/users/{user.id}", json={"username": username, "email": email})
+    data = resp1.get_json()
+    assert resp1.status_code == HTTPStatus.OK
+    assert f"{user.id} was updated!" in data["message"]
+
+    # Ensure the user has been updated
+    resp2 = client.get(f"/users/{user.id}")
+    data = resp2.get_json()
+    assert resp2.status_code == HTTPStatus.OK
+    assert data["username"] == username
+    assert data["email"] == email
+
+
+@pytest.mark.parametrize(
+    "data, user_id, response, message",
+    [
+        pytest.param(
+            {},
+            1,
+            HTTPStatus.BAD_REQUEST,
+            "Input payload validation failed",
+            id="Bad JSON",
+        ),
+        pytest.param(
+            {"email": "me@testdriven.io"},
+            1,
+            HTTPStatus.BAD_REQUEST,
+            "Input payload validation failed",
+            id="Missing field",
+        ),
+        pytest.param(
+            {"username": "me", "email": "me@testdriven.io"},
+            999,
+            HTTPStatus.NOT_FOUND,
+            "User 999 does not exist",
+            id="Bad user",
+        ),
+    ],
+)
+def test_update_user_invalid(client, fill_db, data, user_id, response, message):
+    """Ensure that users can be updated"""
+    resp1 = client.put(f"/users/{user_id}", json=data)
+    data = resp1.get_json()
+    assert resp1.status_code == response
+    assert message in data["message"]
