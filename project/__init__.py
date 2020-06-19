@@ -26,6 +26,7 @@ def create_app(script_info=None):
     log.debug(f"DB URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     db.init_app(app)
+    # This is a test app just make it available everywhere
     if os.getenv("FLASK_ENV") == "development":
         admin.init_app(app)
 

@@ -1,5 +1,5 @@
-from project.app import app, cli, db  # noqa
 from project.api.users.models import User  # noqa
+from project.app import app, cli, db  # noqa
 
 
 @cli.command("recreate_db")

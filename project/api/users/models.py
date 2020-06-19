@@ -45,6 +45,7 @@ class User(db.Model):  # type: ignore
         )
 
 
+# This is a test project just make it available everywhere
 if os.getenv("FLASK_ENV") == "development":
     from project import admin
 

@@ -7,6 +7,12 @@ from project.api.users.models import User
 
 
 @pytest.fixture(scope="function")
+def setup_env(monkeypatch):
+    """Setup things before creating the app"""
+    monkeypatch.setenv("FLASK_ENV", "testing")  # Doesn't seem to be set in time
+
+
+@pytest.fixture(scope="function")
 def mock_api_users_db(monkeypatch):
     """Mock all database functions"""
     user1 = User(username="test1", email="test1@email.com")
@@ -28,15 +34,15 @@ def mock_api_users_db(monkeypatch):
     monkeypatch.setattr(views, "delete_user", lambda user_id: None)
 
 
-@pytest.fixture(scope="module")
-def app():
+@pytest.fixture(scope="function")
+def app(setup_env):
     app = create_app()
     app.config.from_object("project.config.TestingConfig")
     with app.app_context():
         yield app  # testing happens here
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def client(app):
     app.config.from_object("project.config.TestingConfig")
     with app.app_context():
@@ -46,10 +52,13 @@ def client(app):
 
 @pytest.fixture(scope="module")
 def db():
-    app_db.create_all()
-    yield app_db  # testing happens here
-    app_db.session.remove()
-    app_db.drop_all()
+    """Create a database that will stick around for all of the tests"""
+    app = create_app()
+    with app.app_context():
+        app_db.create_all()
+        yield app_db  # testing happens here
+        app_db.session.remove()
+        app_db.drop_all()
 
 
 @pytest.fixture(scope="function")
