@@ -1,10 +1,16 @@
-import os
+import os  # noqa
 
 from flask_admin.contrib.sqla import ModelView
 from flask_restx import Model, fields
 from sqlalchemy.sql import func
 
 from ... import db
+
+
+def enable_admin():
+    from project import admin
+
+    admin.add_view(UsersAdminView(User, db.session))
 
 
 class UsersAdminView(ModelView):
@@ -47,6 +53,4 @@ class User(db.Model):  # type: ignore
 
 # This is a test project just make it available everywhere
 # if os.getenv("FLASK_ENV") == "development":
-from project import admin
-
-admin.add_view(UsersAdminView(User, db.session))
+enable_admin()
