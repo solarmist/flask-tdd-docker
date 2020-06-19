@@ -25,5 +25,5 @@ api = MyApi(
     description="A basic API showing some of what RESTX can do",
 )
 
-api.add_namespace(users_ns)
-api.add_namespace(ping_ns)
+api.add_namespace(users_ns, path="/users")
+api.add_namespace(ping_ns, path="/ping")
