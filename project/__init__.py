@@ -27,8 +27,8 @@ def create_app(script_info=None):
 
     db.init_app(app)
     # This is a test app just make it available everywhere
-    if os.getenv("FLASK_ENV") == "development":
-        admin.init_app(app)
+    # if os.getenv("FLASK_ENV") == "development":
+    admin.init_app(app)
 
     from .api import blueprint as api
 

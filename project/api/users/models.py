@@ -46,7 +46,7 @@ class User(db.Model):  # type: ignore
 
 
 # This is a test project just make it available everywhere
-if os.getenv("FLASK_ENV") == "development":
-    from project import admin
+# if os.getenv("FLASK_ENV") == "development":
+from project import admin
 
-    admin.add_view(UsersAdminView(User, db.session))
+admin.add_view(UsersAdminView(User, db.session))
