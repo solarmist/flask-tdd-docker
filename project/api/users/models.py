@@ -4,11 +4,11 @@ from flask_admin.contrib.sqla import ModelView
 from flask_restx import Model, fields
 from sqlalchemy.sql import func
 
-from ... import db
+from ...webroot import db
 
 
 def enable_admin():
-    from project import admin
+    from ...webroot import admin
 
     admin.add_view(UsersAdminView(User, db.session))
 
