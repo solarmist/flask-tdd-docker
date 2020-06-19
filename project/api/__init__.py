@@ -20,6 +20,7 @@ class MyApi(Api):
 
 api = MyApi(
     blueprint,
+    doc="/doc",
     title="Flask RESTX API boiler-plate",
     version="1.0",
     description="A basic API showing some of what RESTX can do",

@@ -15,7 +15,8 @@ api.models[User.__name__] = user_model
 @api.route("/<int:user_id>")
 @api.param("user_id", "The DB user id for the record")
 class Users(Resource):
-    @api.response(HTTPStatus.NOT_FOUND.value, "User not found.")
+    @api.response(HTTPStatus.NOT_FOUND.value, "User <user_id> does not exist.")
+    @api.response(HTTPStatus.OK.value, "Success")
     @api.marshal_with(user_model)
     def get(self, user_id: int) -> User:
         """Look up a user from the database"""
@@ -25,6 +26,8 @@ class Users(Resource):
         return user
 
     @api.expect(user_model, validate=True)
+    @api.response(HTTPStatus.OK.value, "<user_id> was updated!")
+    @api.response(HTTPStatus.NOT_FOUND.value, "User <user_id> does not exist")
     def put(self, user_id: int) -> Dict[str, str]:
         """Update a user in the database"""
         post_data = request.get_json()
@@ -41,6 +44,8 @@ class Users(Resource):
         return response_object
 
     @api.doc("Delete a user from the DB")
+    @api.response(HTTPStatus.OK.value, "<user_id> was removed!")
+    @api.response(HTTPStatus.NOT_FOUND.value, "User <user_id> does not exist")
     def delete(self, user_id) -> Dict[str, str]:
         """Delete a user from the database"""
         response_object: Dict[str, str] = {}

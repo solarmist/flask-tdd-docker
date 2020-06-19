@@ -7,7 +7,7 @@ setup(
     version="1.0",
     long_description=__doc__,
     license=open("LICENSE").read(),
-    packages=find_packages(),
+    packages=find_namespace_packages(),
     include_package_data=True,
     zip_safe=False,
     install_requires=[
