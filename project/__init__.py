@@ -3,10 +3,12 @@ import os
 from logging import getLogger
 
 from flask import Flask
+from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 
 log = getLogger(__name__)
 db = SQLAlchemy()
+admin = Admin(template_mode="bootstrap3")
 
 
 def create_app(script_info=None):
@@ -24,6 +26,8 @@ def create_app(script_info=None):
     log.debug(f"DB URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
 
     db.init_app(app)
+    if os.getenv("FLASK_ENV") == "development":
+        admin.init_app(app)
 
     from .api import blueprint as api
 

@@ -2,7 +2,7 @@ from flask import Blueprint, url_for
 from flask_restx import Api
 
 from .ping import api as ping_ns
-from .users import api as users_ns
+from .users.views import api as users_ns
 
 blueprint = Blueprint("api", __name__)
 
@@ -12,7 +12,9 @@ class MyApi(Api):
     @property
     def specs_url(self):
         """Monkey patch for HTTPS"""
-        scheme = "http" if "5000" in self.base_url else "https"
+        scheme = (
+            "http" if "5001" in self.base_url or "5000" in self.base_url else "https"
+        )
         return url_for(self.endpoint("specs"), _external=True, _scheme=scheme)
 
 

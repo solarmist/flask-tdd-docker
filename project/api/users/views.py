@@ -4,8 +4,8 @@ from typing import Dict, List, Tuple
 from flask import request
 from flask_restx import Namespace, Resource
 
-from ..models import User
-from ..query import add_user, delete_user, get_all_users, get_user_by_email, get_user_by_id, update_user
+from .models import User
+from .query import add_user, delete_user, get_all_users, get_user_by_email, get_user_by_id, update_user
 
 api = Namespace("users", "Interact with the users")
 user_model = User.get_api_model()

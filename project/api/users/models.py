@@ -1,7 +1,18 @@
+import os
+
+from flask_admin.contrib.sqla import ModelView
 from flask_restx import Model, fields
 from sqlalchemy.sql import func
 
-from . import db
+from ... import db
+
+
+class UsersAdminView(ModelView):
+    column_searchable_list = ("username", "email")
+    column_editable_list = ("username", "email", "created_date")
+    column_filters = ("username", "email")
+    column_sortable_list = ("username", "email", "active", "created_date")
+    column_default_sort = ("created_date", True)
 
 
 class User(db.Model):  # type: ignore
@@ -32,3 +43,9 @@ class User(db.Model):  # type: ignore
                 "created_date": fields.DateTime,
             },
         )
+
+
+if os.getenv("FLASK_ENV") == "development":
+    from project import admin
+
+    admin.add_view(UsersAdminView(User, db.session))

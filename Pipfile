@@ -17,6 +17,7 @@ Werkzeug = "==0.16.1"
 pytest = "*"
 gunicorn = "*"
 pytest-cov = "*"
+flask-admin = "*"
 
 [requires]
 python_version = "3.8"

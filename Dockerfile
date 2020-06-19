@@ -10,7 +10,8 @@ RUN apk update && \
 ENV PYTHONDONTWRITEBYTECODE 1
 # Prevents buffering io
 ENV PYTHONUNBUFFERED 1
-ENV APP_SETTINGS=project.config.TestingConfig
+ENV APP_SETTINGS=project.config.DevelopmentConfig
+ENV FLASK_ENV=development
 
 # set working directory
 # RUN mkdir -p /usr/src/app

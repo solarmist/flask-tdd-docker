@@ -1,6 +1,6 @@
 from typing import List
 
-from . import db
+from ... import db
 from .models import User
 
 
