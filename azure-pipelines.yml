@@ -28,6 +28,7 @@ stages:
       - job: buildAndPushDockerImage
         pool:
           name: Azure Pipelines
+          vmImage: 'ubuntu-latest'
 
         steps:
         - task: AzureResourceGroupDeployment@2
