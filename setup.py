@@ -2,7 +2,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="Your Application",
+    name="flask_tdd_docker",
     author="Joshua Olson",
     version="1.0",
     long_description=__doc__,

@@ -1,10 +1,5 @@
-from flask.cli import FlaskGroup
-
-from project import create_app, db
+from project.app import app, db, cli
 from project.models import User  # noqa
-
-app = create_app()
-cli = FlaskGroup(create_app=create_app)
 
 
 @cli.command("recreate_db")
