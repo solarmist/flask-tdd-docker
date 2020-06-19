@@ -38,6 +38,7 @@ import pytest
         ),
     ],
 )
+@pytest.mark.integration
 def test_add_user(client, db, data, response, message):
     """Test adding users endpoint
 
@@ -50,6 +51,7 @@ def test_add_user(client, db, data, response, message):
     assert message in resp.get_json()["message"]
 
 
+@pytest.mark.integration
 def test_get_user(client, truncate_db, add_user):
     """Ensure we can pull a user from the API end point"""
     user = add_user("myne", "myne@gilberta.co")
@@ -61,6 +63,7 @@ def test_get_user(client, truncate_db, add_user):
     assert "myne@gilberta.co" in data["email"]
 
 
+@pytest.mark.integration
 def test_get_user_fail(client, truncate_db):
     """Ensure missing users return a 404"""
     resp = client.get("/users/1", content_type="application/json")
@@ -69,6 +72,7 @@ def test_get_user_fail(client, truncate_db):
     assert "User 1 does not exist" in data["message"]
 
 
+@pytest.mark.integration
 def test_UsersList_get(client, fill_db):
     """Test all users can be queried properly"""
 
@@ -81,6 +85,7 @@ def test_UsersList_get(client, fill_db):
     assert "myne" == data[1]["username"]
 
 
+@pytest.mark.integration
 def test_remove_user(client, truncate_db, add_user):
     """Ensure a user can be deleted"""
     # Ensure the user exists
@@ -102,6 +107,7 @@ def test_remove_user(client, truncate_db, add_user):
     assert len(data) == 0
 
 
+@pytest.mark.integration
 def test_remove_user_incorrect_id(client, fill_db):
     """Test that removing a user that doesn't exist fails"""
     resp = client.delete("/users/999")
@@ -110,6 +116,7 @@ def test_remove_user_incorrect_id(client, fill_db):
     assert "User 999 does not exist" in data["message"]
 
 
+@pytest.mark.integration
 def test_update_user(client, truncate_db, add_user):
     """Ensure that users can be updated"""
     user = add_user("user-to-be-updated", "update-me@testdriven.io")
@@ -155,6 +162,7 @@ def test_update_user(client, truncate_db, add_user):
         ),
     ],
 )
+@pytest.mark.integration
 def test_update_user_invalid(client, fill_db, data, user_id, response, message):
     """Ensure that users can be updated"""
     resp1 = client.put(f"/users/{user_id}", json=data)

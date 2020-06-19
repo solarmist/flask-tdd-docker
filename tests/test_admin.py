@@ -2,14 +2,13 @@ import os
 
 from http import HTTPStatus
 
-from project import create_app, db
+from project.app import app, db
 
 
 def test_admin_view_dev():
     os.environ["FLASK_ENV"] = "development"
 
     assert os.environ["FLASK_ENV"] == "development"
-    app = create_app()
     app.config.from_object("project.config.TestingConfig")
     with app.app_context():
         db.session.remove()

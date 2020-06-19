@@ -1,9 +1,9 @@
 import pytest
 
-from project import create_app
-from project import db as app_db
 from project.api.users import views
 from project.api.users.models import User
+from project.webroot import create_app
+from project.webroot import db as app_db
 
 
 @pytest.fixture(scope="function")
