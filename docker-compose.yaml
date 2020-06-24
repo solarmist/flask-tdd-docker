@@ -5,11 +5,11 @@ services:
 
     users:  # Service called "users"
         build:
-            context: .  # The path containing the Dockerfile or a URL to a git repo
+            context: ./services/users  # The path containing the Dockerfile or a URL to a git repo
             dockerfile: Dockerfile
         entrypoint: ["/usr/src/app/entrypoint.sh"]
         volumes:
-            - ./:/usr/src/app
+            - ./services/users:/usr/src/app
             # This is used to mount the code from the current dir into the container. Needed for dev otherwise you'd need to rebuild the image for every change.
         ports:
             - 5001:7000
@@ -21,7 +21,7 @@ services:
 
     users-db:
         build:
-            context: ./db
+            context: ./services/users/db
             dockerfile: Dockerfile
         expose:
             - 5432

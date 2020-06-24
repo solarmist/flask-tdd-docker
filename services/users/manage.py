@@ -1,14 +1,10 @@
-from flask.cli import FlaskGroup
-
-from project import create_app, db
-from project.models import User  # noqa
-
-app = create_app()
-cli = FlaskGroup(create_app=create_app)
+from project.api.users.models import User  # noqa
+from project.app import app, cli, db  # noqa
 
 
 @cli.command("recreate_db")
 def recreate_db():
+    print(f"DB URI: {app.config['SQLALCHEMY_DATABASE_URI']}")
     print("Dropping tables")
     db.drop_all()
     print("Re-creating tables")

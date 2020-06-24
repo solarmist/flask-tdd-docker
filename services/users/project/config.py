@@ -8,7 +8,7 @@ _DB_NAME = os.environ.get("DB_NAME", "users_dev")
 _DB_PASS = os.environ.get("POSTGRES_PASSWORD", "FLASK_PASS")
 _DB_PORT = os.environ.get("DB_PORT", "users-db")
 _DB_USER = os.environ.get("POSTGRES_USER", "FLASK_USER")
-SSL_MODE = os.environ.get("SSL_MODE", True)
+SSL_MODE = os.environ.get("SSL_MODE", False)
 
 
 class BaseConfig:
