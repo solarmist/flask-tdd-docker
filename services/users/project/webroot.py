@@ -3,10 +3,12 @@ import os
 from logging import getLogger
 
 from flask import Flask
+from flask_cors import CORS
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
 
 log = getLogger(__name__)
+cors = CORS()
 db = SQLAlchemy()
 admin = Admin(template_mode="bootstrap3")
 
@@ -24,6 +26,8 @@ def create_app(script_info=None):
     log.debug(f"Config file to load: {config_file}")
     app.config.from_object(config_file)
 
+    # set up extensions
+    cors.init_app(app, resources={r"*": {"origins": "*"}})
     db.init_app(app)
     # This is a test app just make it available everywhere
     # if os.getenv("FLASK_ENV") == "development":

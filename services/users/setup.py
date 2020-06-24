@@ -14,6 +14,7 @@ setup(
         "Flask-Admin",
         "Flask-RESTX",
         "Flask-SQLAlchemy",
+        "Flask-Cors",
         "Flask",
         "gunicorn",
         "psycopg2-binary",

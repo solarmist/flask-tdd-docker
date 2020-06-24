@@ -18,6 +18,7 @@ pytest = "*"
 gunicorn = "*"
 pytest-cov = "*"
 flask-admin = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.8"
