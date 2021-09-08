@@ -2,7 +2,7 @@
 --index-url https://pypi.python.org/simple/
 
 Flask-Admin==1.5.5
-Flask-RESTX==0.1.1
+Flask-RESTX==0.5.1
 Flask-SQLAlchemy==2.4.1
 Flask==1.1.1
 Flask-Cors==3.0.8
