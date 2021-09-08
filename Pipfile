@@ -8,7 +8,7 @@ black = "*"
 flake8 = "*"
 
 [packages]
-flask-restx = "==0.1.1"
+flask-restx = "==0.5.1"
 isort = "*"
 psycopg2-binary = "==2.8.4"
 Flask = "==1.1.1"
